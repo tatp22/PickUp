@@ -19,18 +19,27 @@
 # Input Line History (newest to oldest):
 
 # Registers:
+""1	LINE	0
+	
+"2	LINE	0
+	Ever wanted to play pick up games in your local neighborhood? Just make a PickUp account to see who's playing around you!
 
 # File marks:
-'0  5  120  ~/README.md
+'0  3  120  ~/README.md
+'1  4  120  ~/README.md
 
 # Jumplist (newest first):
--'  5  120  ~/README.md
+-'  3  120  ~/README.md
+-'  4  120  ~/README.md
 -'  1  0  ~/README.md
+-'  5  120  ~/README.md
 
 # History of marks within files (newest to oldest):
 
 > ~/README.md
-	"	5	120
-	^	5	121
-	.	5	120
-	+	5	120
+	"	3	120
+	^	3	121
+	.	3	121
+	+	4	120
+	+	4	0
+	+	3	121
