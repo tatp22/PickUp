@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="jumbo">
 		<h2>Notifcations for {{ session['username'] }}</h2>
-		<p>This is a screen where your relavent events will pop up! Just click anoy one of them to learn more</p>
+		<p>This is a screen where your relavent events will pop up! Just click any one of them to learn more</p>
 	    {% for item in data %}
         {% if item[1] not in data2 %}
 	    <div class="notif-div">
