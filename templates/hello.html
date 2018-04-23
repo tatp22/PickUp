@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+{% set active_page = "hello" %}
+{% block content %}
+	<div class="jumbo">
+		<h2>Welcome! You are now logged in!</h2>
+		<br/>
+		<p>Click <a href="/welcome">here</a> to go to the welcome page</p>
+		<br/>
+		<a href="/logout">Logout</a>
+		<br/>
+		<br/>
+		<h3>Sports Data</h3>
+		{% for item in data %}
+		{{ item }}<br/>
+		{% endfor %}
+	</div>
+
+{% endblock %}

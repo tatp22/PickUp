@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- home wlcome login events testform liveevents --->
+<html>
+    {% set navigation_bar = [
+    ('/', 'home', 'Home'),
+    ] -%}
+
+    {% set nav_bar_logged_in = [
+    ('/', 'home', 'Home'),
+    ('/live_events', 'live_events', 'Live Events'),
+    ('/events', 'events', 'Add an Event'),
+    ('/my_events', 'my_events', 'My Events'),
+    ] -%}
+
+    {% set right_side = [
+    ('/log', 'log', 'Login', 'user'),
+    ('/reg', 'reg', 'Sign Up', 'log-in')
+    ] -%}
+
+    {% set active_page = active_page|default('home') -%}
+
+	<head>
+		<title>Pickup</title>
+		<link rel="stylesheet" type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	</head>
+	<body>
+		<header>
+			<div class="navbar navbar-inverse">
+			        <div class="collapse navbar-collapse">
+
+    					<ul class="nav navbar-nav">
+    						{% if 'logged_in' not in session %} <!-- Logged out --->
+        						{% for href, id, caption in navigation_bar %}
+                                    <li{% if id == active_page %} class="active"{% endif
+                                    %}><a href="{{ href|e }}">{{ caption|e }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if session['logged_in'] %} <!-- Logged in --->
+                                {% for href, id, caption in nav_bar_logged_in %}
+                                    <li{% if id == active_page %} class="active"{% endif
+                                    %}><a href="{{ href|e }}">{{ caption|e }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+    					</ul>
+
+    					<ul class="nav navbar-nav navbar-right">
+    					    {% if 'logged_in' not in session %} <!-- Logged out --->
+        					    {% for href, id, caption, glyph in right_side %}
+                                <li{% if id == active_page %} class="active"{% endif
+                                %}><a href="{{ href|e }}">
+                                <span class="glyphicon glyphicon-{{ glyph|e}}"></span>{{ caption|e }}
+                                </a></li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if session['logged_in'] %} <!-- Logged in --->
+                                <li><a href="/logout">Logout, {{ session['username'] }}!!</a></li>
+                                <li{% if id == active_page %} class="active"{% endif
+                                %}><a href="/edit_profile">Edit profile, {{ session['username'] }}!!</a></li>
+                                <li{% if id == active_page %} class="active"{% endif
+                                %}><a href="/notifications">Notifications {{ (noti_num) }}</a></li>
+                                <li><a href="/testadv">ADV TEST</a></li>
+                            {% endif %}
+                        </ul>
+
+    					</div>
+    			</div>
+			</div>
+		</header>
+		<div class="templateData">
+		<div class="container">
+			{% block content%}
+			{% endblock %}
+		</div>
+    </div>
+	</body>
+</html>

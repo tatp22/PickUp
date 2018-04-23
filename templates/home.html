@@ -1,0 +1,78 @@
+{% extends "template.html" %}
+{% set active_page = "home" %}
+{% block content %}
+	<div class="jumbo">
+	    <div class="homeTitle">
+		    <h1 text-align="center">Welcome to Pickup!</h1>
+
+		    <br/>
+		</div>
+	</div>
+
+    <img src="/static/pickup.png" class="center">
+
+	<div class="homeTitle">
+	    <p class="homeInfoTop">Search for all your local pickup games! Pickup provides the
+	    ability to search for your favorite local sports games and join on any
+	    pickup games happening in your area right now! Just pick your
+	    preffered location and your sport, and find out the local games that are
+	    playing around you!
+	    </p>
+	</div>
+
+    <div class="homeDivInfo">
+    <h3 class="homeHeader">Start your own pickup games</h3>
+    <p class="homeInfo">Have an urge to play soccer right now? Pickup lets
+       you start your own pickup games at your local favorite
+       parks. Simply make an event, choose a location and a time,
+       and people will flock to play your sport right away!
+    </p>
+    </div>
+
+    <div class="homeDivInfo">
+    <h3 class="homeHeader">Search for your favorite games</h3>
+    <p class="homeInfo">
+        Don't want to make a game? Search from millions of games currently going
+        on right now from our database! Simply see what's going on in your area
+        and go enjoy playing and meeting your new friends.
+    </p>
+    </div>
+
+    <div class="homeDivInfo">
+    <h3 class="homeHeader">Recieve custom notifications</h3>
+    <p class="homeInfo">
+        Want to get notified if there are relavent games around you? Pickup
+        notifies you automatically to see what games are happening in your area
+        that you would be interested in. You can join these events right away
+        and meet your new teammates on the field right away.
+    </p>
+    </div>
+
+    <div class="homeDivInfo">
+    <h3 class="homeHeader">Edit your profile at will</h3>
+    <p class="homeInfo">
+        As you grow more experienced, your skills change. Edit your
+        profile to update your reflective max skills so that cames are more
+        custom tailored to your needs.
+    </p>
+    </div>
+    {% if 'logged_in' not in session %} <!-- Logged out --->
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="homeDivInfoLink">
+                    <a href="/log">
+                        Log In
+                    </a>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="homeDivInfoLink">
+                    <a href="/reg">
+                        Sign Up
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

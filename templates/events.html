@@ -1,0 +1,96 @@
+{% extends "template.html" %}
+{% set active_page = "events" %}
+{% block content %}
+	<div class="jumbo">
+	    <div class="eventHeader">
+		<h2>ADD EVENT</h2>
+		</div>
+	</div>
+    <div class="eventForm">
+    <form id="myForm" action = "/events_success" method=post >
+      Event Name<br>
+      <input type="text" name="eventname" required="">
+      <br>
+      Sports (* You can only choose the sports that you can play)<br>
+      <select name="sports">
+       {% for item in sports_data %}
+         <option value="{{ item[0] }}">{{ item[0] }}</option>
+       {% endfor %}
+     </select>
+
+      <br>
+
+     Location<br>
+      <select name="location">
+       {% for item in loc_data %}
+         <option value="{{ item[0] }}">{{ item[0] }}</option>
+       {% endfor %}
+     </select>
+
+      <br>
+      Time<br>
+        <input type="datetime-local" name="time" required>
+      <br>
+      Number of Players<br>
+      <input type="number" name="numplayers" required>
+      <br>
+      Minimum Age:<br>
+      <input type="number" name="minage" id="minage" required>
+      <br>
+      Maximum Age:<br>
+      <input type="number" name="maxage" id="maxage"  required>
+      <br>
+       Minimum Skill Level:<br>
+      <input type = "radio" name = "minskill" value = "1" required> 1
+      <input type = "radio" name = "minskill" value = "2"> 2
+      <input type = "radio" name = "minskill" value = "3"> 3
+      <input type = "radio" name = "minskill" value = "4"> 4
+      <input type = "radio" name = "minskill" value = "5"> 5
+      <br>
+      Maximum Skill Level:<br>
+      <input type = "radio" name = "maxskill" value = "1" required> 1
+      <input type = "radio" name = "maxskill" value = "2"> 2
+      <input type = "radio" name = "maxskill" value = "3"> 3
+      <input type = "radio" name = "maxskill" value = "4"> 4
+      <input type = "radio" name = "maxskill" value = "5"> 5
+      <br>
+      <br>
+      <input type="submit" value="Create an Event">
+    </form>
+    </div>
+
+<script>
+    window.onload = function() {
+    let submit = document.querySelector("#submit");
+
+    function validateAge(minAge, maxAge) {
+        let min = parseInt(minAge, 10);
+        let max = parseInt(maxAge, 10);
+        return min >= max ?  false :  true;
+    }
+    function validateSkill(minSkill, maxSkill) {
+        let min = parseInt(minSkill, 10);
+        let max = parseInt(maxSkill, 10);
+        return min >= max ?  false :  true;
+    }
+
+    submit.onclick = function() {
+        let minAge = document.querySelector("#minage").value;
+        let maxAge = document.querySelector("#maxage").value;
+        let radios = document.querySelectorAll('input[type="radio"]:checked');
+        let minSkill = radios[0].value;
+        let maxSkill = radios[1].value;
+
+        if(validateAge(minAge, maxAge) && validateSkill(minSkill, maxSkill))
+            return  true;
+        else {
+            alert("Invalid data");
+            return false;
+        }
+    }
+
+}
+</script>
+
+
+{% endblock %}

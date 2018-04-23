@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+{% set active_page = "reg" %}
+{% block content %}
+
+    <h1>Sign Up Here! :)</h1>
+        <br>
+        {% from "_formhelpers.html" import render_field %}
+        <form method=post action="/reg">
+            <dl>
+                {{render_field(form.username)}}
+                {{render_field(form.real_name)}}
+                {{render_field(form.age)}}
+                {{render_field(form.password)}}
+                {{render_field(form.confirm)}}
+                {{render_field(form.accept_tos)}}
+            </dl>
+            <p><input type=submit value=Register></p>
+        </form>
+
+        {% if error %}
+            <p class="error"><strong>ERROR:</strong>{{error}}</p>
+        {% endif %}
+        {% for message in get_flashed_messages() %}
+		<div class=flash>
+			{{ message }}
+		</div>
+	{% endfor %}
+{% endblock %}

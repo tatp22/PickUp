@@ -1,0 +1,46 @@
+{% extends "template.html" %}
+{% set active_page = "notifications" %}
+{% block content %}
+	<div class="jumbo">
+		<h2>Notifcations for {{ session['username'] }}</h2>
+		<p>This is a screen where your relavent events will pop up! Just click anoy one of them to learn more</p>
+	    {% for item in data %}
+        {% if item[1] not in data2 %}
+	    <div class="notif-div">
+		<p class="notificationsname">{{ item[1] }}</p>
+		<!-- Pictures! --->
+		{% if item[2] == "Soccer"%}
+		<img src = "https://d30y9cdsu7xlg0.cloudfront.net/png/73767-200.png", alt = "Soccer Ball", style="width:100px;height:100px;"></TD>
+	    {% endif %}
+	    {% if item[2] == "Frisbee"%}
+	    <img src = "https://images-na.ssl-images-amazon.com/images/I/81oUpkwV8ML._SY355_.jpg", alt = "Frisbee", style="width:100px;height:100px;"></TD>
+	    {% endif %}
+        {% if item[2] == "Basketball"%}
+        <img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Basketball.png/220px-Basketball.png", alt = "Basketball", style="width:100px;height:100px;"></TD>
+		{% endif %}
+		{% if item[2] == "Football"%}
+	    <img src = "https://thestampedenews.org/wp-content/uploads/2017/09/JVfootball.png", alt = "Football", style="width:100px;height:100px;"></TD>
+		{% endif %}
+		{% if item[2] == "Baseball"%}
+		<img src = "http://www.trbimg.com/img-59239622/turbine/ph-ac-cs-baseball-severn-boys-latin0523-20170522", alt = "Baseball", style="width:100px;height:100px;"></TD>
+		{% endif %}
+		{% if item[2] == "Cricket"%}
+		<img src = "https://i.pinimg.com/236x/b5/21/bb/b521bbba24e2c33fe187e119f6b6e995--cricket-bat-cultural-studies.jpg", alt = "Cricket", style="width:100px;height:100px;"></TD>
+		{% endif %}
+		<!-- Pictures! --->
+		<p class="notificationsdata">Location: {{ item[3] }}</p>
+		<p class="notificationsdata">Creator: {{ item[5] }}</p>
+
+		<form action = "/notif_join" method=post>
+            <input type="hidden" value="{{item[1]}}" name="item0" />
+            <input type="hidden" value="{{item[2]}}" name="item1" />
+            <input type="hidden" value="{{item[3]}}" name="item2" />
+            <input type="hidden" value="{{item[5]}}" name="item3" />
+		    <input type="submit" value="Join">
+		 </form>
+
+		</div>
+		{% endif %}
+		{% endfor %}
+	</div>
+{% endblock %}

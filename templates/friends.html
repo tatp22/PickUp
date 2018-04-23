@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% set active_page = "friends" %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="static/js/application.js"></script>
+
+	<div class="jumbo">
+	    <div class="liveSearch">
+		<h2>Search Users</h2>
+		<br/>
+		<form action="/search_event" method=post>
+          Event Name: <input type="text" name="searchkey"> <input type="submit" value="Search">
+        </form>
+		<br/>
+		</div>
+		<div>
+		    {% for friend in data %}
+		    {{ friend }}
+		    {% endfor %}
+		</div>
+	</div>
+
+
+{% endblock %}

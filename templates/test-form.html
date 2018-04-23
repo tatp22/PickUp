@@ -1,0 +1,15 @@
+{% extends "template.html" %}
+{% set active_page = "test-form" %}
+{% block content %}
+	<div class="jumbo">
+		<h2>Welcome!!!!!!!</h2>
+		<br/>
+		<form action="/test-form_success" method=post>
+          <br>
+          Sports:<br>
+          <input type="text" name="sports">
+          <br>
+          <input type="submit" value ="Send">
+         </form>
+	</div>
+{% endblock %}

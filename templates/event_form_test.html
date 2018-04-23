@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+{% block content %}
+	<div class="jumbo">
+		<br/>
+		<p>Click <a href="/welcome">here</a> to go to the welcome page</p>
+		<br/>
+		<br/>
+		<br/>
+		<h3>Events Data</h3>
+
+		{% for item in data %}
+		{{ item }}
+		{% endfor %}
+	</div>
+
+{% endblock %}

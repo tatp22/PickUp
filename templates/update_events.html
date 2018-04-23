@@ -1,0 +1,68 @@
+{% extends "template.html" %}
+{% set active_page = "update events" %}
+{% block content %}
+	<div class="jumbo">
+	    <div class="eventHeader">
+		<h2>UPDATE EVENTS PAGE</h2>
+		</div>
+	</div>
+
+	{% for item in data %}
+	<br/>
+    <div class="eventForm">
+    <form action = "/events_update" method=post>
+      Event Name:<br>
+      <input type="text" name="eventname" value="{{item[0]}}" required="" readonly>
+      <br>
+      Sports:<br>
+      <select name="sports">
+       {% for sitem in sports_data %}
+         <option value="{{ sitem[0] }}">{{ sitem[0] }}</option>
+       {% endfor %}
+     </select>
+      <br>
+     Location<br>
+      <select name="location">
+       {% for litem in loc_data %}
+         <option value="{{ litem[0] }}">{{ litem[0] }}</option>
+       {% endfor %}
+     </select>
+      Time:<br>
+        {% for time in datetime %}
+         <input type="datetime-local" name="time" value="{{ time }}">
+       {% endfor %}
+
+
+      <br>
+
+      Number of Players:<br>
+      <input type="number" name="numplayers" value={{item[2]}} required>
+      <br>
+      Minimum Age:<br>
+      <input type="number" name="minage" value={{item[5]}} required>
+      <br>
+      Maximum Age:<br>
+      <input type="number" name="maxage" value={{item[6]}} required>
+      <br>
+      Minimum Skill Level:<br>
+      <input type = "radio" name = "minskill" value = "1" required> 1
+      <input type = "radio" name = "minskill" value = "2"> 2
+      <input type = "radio" name = "minskill" value = "3"> 3
+      <input type = "radio" name = "minskill" value = "4"> 4
+      <input type = "radio" name = "minskill" value = "5"> 5
+      <br>
+      Maximum Skill Level:<br>
+      <input type = "radio" name = "maxskill" value = "1" required> 1
+      <input type = "radio" name = "maxskill" value = "2"> 2
+      <input type = "radio" name = "maxskill" value = "3"> 3
+      <input type = "radio" name = "maxskill" value = "4"> 4
+      <input type = "radio" name = "maxskill" value = "5"> 5
+      <br>
+      <br>
+      <input type="submit" value="Update">
+    {% endfor %}
+    </form>
+    </div>
+
+
+{% endblock %}

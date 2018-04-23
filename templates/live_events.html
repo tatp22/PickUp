@@ -1,0 +1,107 @@
+{% extends "template.html" %}
+{% set active_page = "live_events" %}
+{% block content %}
+	<div class="jumbo">
+	    <div class="liveSearch">
+		<h2>Search Events</h2>
+		<br/>
+		<form action="/search_event" method=post>
+          Event Name: <input type="text" name="searchkey"> <input type="submit" value="Search">
+        </form>
+        <form action="/filter_event" method=post>
+          Filter by Sports:
+            <input type="radio" name="filter" value="Baseball" checked> Baseball
+            <input type="radio" name="filter" value="Basketball"> Basketball
+            <input type="radio" name="filter" value="Cricket"> Cricket
+            <input type="radio" name="filter" value="Football"> Football
+            <input type="radio" name="filter" value="Frisbee"> Frisbee
+            <input type="radio" name="filter" value="Soccer">Soccer
+            <input type="submit" value="Filter">
+        </form>
+		<br/>
+		</div>
+        {% for item in data %}
+        {% if item[0] not in data2 %}
+            <div class="notif-div">
+            <p class="notificationsname">{{ item[0] }}</p>
+            {% if item[1] == "Soccer"%}
+    	    <img src = "https://d30y9cdsu7xlg0.cloudfront.net/png/73767-200.png", alt = "Soccer Ball", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    {% if item[1] == "Frisbee"%}
+    	    <img src = "https://images-na.ssl-images-amazon.com/images/I/81oUpkwV8ML._SY355_.jpg", alt = "Frisbee", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    {% if item[1] == "Basketball"%}
+    		<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Basketball.png/220px-Basketball.png", alt = "Basketball", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    {% if item[1] == "Football"%}
+    		<img src = "https://thestampedenews.org/wp-content/uploads/2017/09/JVfootball.png", alt = "Football", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    {% if item[1] == "Baseball"%}
+    		<img src = "http://www.trbimg.com/img-59239622/turbine/ph-ac-cs-baseball-severn-boys-latin0523-20170522", alt = "Baseball", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    {% if item[1] == "Cricket"%}
+    		<img src = "https://i.pinimg.com/236x/b5/21/bb/b521bbba24e2c33fe187e119f6b6e995--cricket-bat-cultural-studies.jpg", alt = "Cricket", style="width:100px;height:100px;">
+    	    {% endif %}
+    	    <p class="notificationsdata">Location: {{ item[3] }}</p>
+    		<p class="notificationsdata">Time: {{ item[4] }}</p>
+    		<p class="notificationsdata">Curr Players: {{ item[-1] }}/{{item[2]}}</p>
+    		<p class="notificationsdata">Skill Level Range: {{ item[7] }} ~ {{item[8]}}</p>
+    		<p class="notificationsdata">Creator: {{ item[9] }}</p>
+
+    		{% if session['username'] == item[-1] %}
+    		<form action="/delete_event" method=post><button type="submit" value="{{item[0]}}" name=eventname>Delete</button></form>
+    		<form action="/update_event" method=post><button type="submit" value="{{item[0]}}" name=updateeventname>Update</button></form>
+    		{% endif %}
+
+            {% if session['username'] != item[-1] and item[-1] != item[2] and item[1] in playsData%}
+            <form action = "/notif_join" method=post>
+                <div class="alert alert-success" role="alert">
+                    <input type="hidden" value="{{ item[0] }}" name="item0" />
+                    <input type="hidden" value="{{ item[3] }}" name="item1" />
+                    <input type="hidden" value="{{ item[3] }}" name="item2" />
+                    <input type="hidden" value="{{ item[9] }}" name="item3" />
+                    <input type="submit" value="Join">
+                </div>
+            </form>
+            {% endif %}
+
+
+            {% if item[-1] == item[2] %}
+            <div class="alert alert-danger" role="alert">
+              <b>This Event is FULL</b>
+            </div>
+            {% endif %}
+
+            {% if item[1] not in playsData %}
+            <div class="alert alert-warning" role="alert">
+              <b>Un-playable Sports: Add this Sports to your Profile</b>
+            </div>
+            {% endif %}
+
+
+	    </div>
+	    {% endif %}
+        {% endfor %}
+
+
+
+		<!--{% for line in data %}
+		{% for item in line %}
+		{{item}}
+		{% endfor %}
+		{% endfor %}
+		<!--<h4>Event Name | Sports | Min Player | Location | Time | Min Age | Max Age | Min SkillLevel | Max SkillLevel</h4>
+		{% for item in data %}
+		{{item}}
+		{% if item[1] == "Soccer"%}
+		<img src = "https://d30y9cdsu7xlg0.cloudfront.net/png/73767-200.png", alt = "Soccer Ball">
+		{% endif %}
+		{% if item[1] == "Basketball"%}
+			<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Basketball.png/220px-Basketball.png", alt = "Soccer Ball">
+		{% endif %}
+		<form action="/delete_event" method=post><button type="submit" value={{item[0]}} name=eventname>Delete</button></form>
+		<form action="/update_event" method=post><button type="submit" value={{item[0]}} name=updateeventname>Update</button></form>
+		{% endfor %}--->
+	</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "template.html" %}
+{% set active_page = "testadv" %}
+{% block content %}
+	<div class="jumbo">
+		<h2>Here are your current events</h2>
+		<br/>
+		<h3>Current Events</h3>
+        {% for item in data %}
+        <div class="notif-div">
+        <p class="notificationsname">{{ item[0] }}</p>
+        {% if item[1] == "Soccer"%}
+	    <img src = "https://d30y9cdsu7xlg0.cloudfront.net/png/73767-200.png", alt = "Soccer Ball", style="width:100px;height:100px;">
+	    {% endif %}
+	    {% if item[1] == "Frisbee"%}
+	    <img src = "https://images-na.ssl-images-amazon.com/images/I/81oUpkwV8ML._SY355_.jpg", alt = "Frisbee", style="width:100px;height:100px;">
+	    {% endif %}
+	    {% if item[1] == "Basketball"%}
+		<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Basketball.png/220px-Basketball.png", alt = "Basketball", style="width:100px;height:100px;">
+	    {% endif %}
+	    {% if item[1] == "Football"%}
+		<img src = "https://thestampedenews.org/wp-content/uploads/2017/09/JVfootball.png", alt = "Football", style="width:100px;height:100px;">
+	    {% endif %}
+	    {% if item[1] == "Baseball"%}
+		<img src = "http://www.trbimg.com/img-59239622/turbine/ph-ac-cs-baseball-severn-boys-latin0523-20170522", alt = "Baseball", style="width:100px;height:100px;">
+	    {% endif %}
+	    {% if item[1] == "Cricket"%}
+		<img src = "https://i.pinimg.com/236x/b5/21/bb/b521bbba24e2c33fe187e119f6b6e995--cricket-bat-cultural-studies.jpg", alt = "Cricket", style="width:100px;height:100px;">
+	    {% endif %}
+	    <p class="notificationsdata">Location: {{ item[3] }}</p>
+		<p class="notificationsdata">Time: {{ item[4] }}</p>
+		<p class="notificationsdata">Creator: {{ item[9] }}</p>
+
+		<div class="partdiv">
+		<p class="friendsdata">Who's Participating</p>
+		{% for parter in data_participates %}
+        {% if parter[1] == item[0]%}
+		<p class="friend">{{parter[0]}}</p>
+        {% endif %}
+		{% endfor %}
+		</div>
+
+        <div class="row">
+        <div class="col-xs-6">
+		<div class="team1Div">
+		<p class="friendsdata">Team 1</p>
+		{% for friend in data_team1 %}
+        {% if friend[1] == item[0] %}
+		<p class="friend">{{friend[0]}}</p>
+        {% endif %}
+		{% endfor %}
+		</div>
+		</div>
+
+        <div class="col-xs-6">
+		<div class="team2Div">
+		<p class="friendsdata">Team 2</p>
+		{% for friend in data_team2 %}
+        {% if friend[1] == item[0] %}
+		<p class="friend">{{friend[0]}}</p>
+        {% endif %}
+		{% endfor %}
+		</div>
+		</div>
+		</div>
+
+		{% if item[-1] != session['username'] %}
+		<form action = "/leave_event" method=post>
+                <input type="hidden" value="{{ item[0] }}" name="nameOfEvent" />
+                <input type="submit" value="Leave Event">
+        </form>
+        {% endif %}
+        {% if item[-1] == session['username'] %}
+        <form action="/delete_event" method=post><button type="submit" value="{{item[0]}}" name=eventname>Delete</button></form>
+        <form action="/update_event" method=post><button type="submit" value="{{item[0]}}" name=updateeventname>Update</button></form>
+        {% endif %}
+	    </div>
+        {% endfor %}
+		<!--{% for item in data %}
+		{{ item }}
+		<form action="/delete_event" method=post><button type="submit" value={{item[0]}} name=eventname>Delete</button></form>
+		<form action="/update_event" method=post><button type="submit" value={{item[0]}} name=updateeventname>Update</button></form>
+		{% endfor %}-->
+	</div>
+
+{% endblock %}

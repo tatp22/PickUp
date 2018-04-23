@@ -1,0 +1,127 @@
+{% extends "template.html" %}
+{% set active_page = "edit_profile" %}
+{% block content %}
+<div class="jumbo">
+	<h2>EDIT PROFILE</h2>
+</div>
+
+    <form action = "/add_sport" method=post>
+        <fieldset>
+            <legend> Add a sport</legend>
+            Sports:<br>
+            <select name="sport">
+                {% for item in data %}
+                    <option value={{ item[0] }}>{{ item[0] }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            Skill Level:<br>
+            <input type = "radio" name = "skill" value = "1" required> 1
+            <input type = "radio" name = "skill" value = "2"> 2
+            <input type = "radio" name = "skill" value = "3"> 3
+            <input type = "radio" name = "skill" value = "4"> 4
+            <input type = "radio" name = "skill" value = "5"> 5
+            <br>
+            <br>
+            <input type="submit" value="Add">
+        </fieldset>
+    </form>
+
+    <br>
+    <form action = "/add_location" method=post>
+        <fieldset>
+            <legend>Add a location</legend>
+            Locations:<br>
+            <select name="location">
+                {% for item in loc_data %}
+                    <option value = "{{item[0]}}">{{item[1]}}: {{item[0]}}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <input type = "submit" value = "Add">
+        </fieldset>
+    </form>
+
+    <TABLE WIDTH = "50%">
+        <TR>
+            <TH>
+                <H3>Current Locations</H3>
+            </TH>
+        </TR>
+        <TR>
+            <TH>Image</TH>
+            <TH>Address</TH>
+            <TH>Location</TH>
+            <TH>In or Out</TH>
+        </TR>
+       {% for line in my_loc_data %}
+        <TR>
+            {% if line[1] == "Main Quad"%}
+            <TD><img src = "https://theblacksheeponline.com/wp-content/uploads/2016/01/Quad.jpeg", alt = "Main Quad", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% if line[1] == "Arc"%}
+            <TD><img src = "http://theblacksheeponline.com/wp-content/uploads/2016/03/img02.jpg", alt = "Arc", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% if line[1] == "South Quad"%}
+            <TD><img src = "http://yougenics.net/griffis/courses/students/Loopy%20Circadian/Images%20for%20Illustrator/5756755146_550da7fdb2_b.jpg", alt = "South Quad", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% if line[1] == "Arc fields"%}
+            <TD><img src = "/static/arcFields.png", alt = "Arc fields", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% if line[1] == "Bardeen Quad"%}
+            <TD><img src = "https://informsuiuc.files.wordpress.com/2015/08/bardeen-engineering-quad-university-of-illinois-urbana-champaign.jpg?w=640", alt = "Bardeen Quad", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% if line[1] == "CRCE"%}
+            <TD><img src = "http://4.bp.blogspot.com/_bjxHVM71Thg/S9hjuqYfL7I/AAAAAAAAAJU/7mbsYSNc9FM/s1600/CRCE1.jpg", alt = "CRCE", style="width:100px;height:100px;"></TD>
+            {% endif %}
+            {% for item in line %}
+            <TD>{{item}}</TD>
+            {% endfor %}
+            <TD><form action="/delete_loc" method=post><button type="submit" value="{{line[0]}}" name=locname>Delete</button></form></TD>
+        </TR>
+        {% endfor %}
+    </TABLE>
+
+    <TABLE WIDTH = "35%">
+        <TR>
+            <TH>
+                <H3>Current Sports</H3>
+            </TH>
+        </TR>
+        <TR>
+            <TH>Image</TH>
+           <TH>Sport</TH>
+           <TH>Skill Level</TH>
+        </TR>
+        {% for item in data2 %}
+        <TR>
+            {% if item[0] == "Soccer"%}
+		    <TD><img src = "https://d30y9cdsu7xlg0.cloudfront.net/png/73767-200.png", alt = "Soccer Ball", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+		    {% if item[0] == "Frisbee"%}
+		    <TD><img src = "https://images-na.ssl-images-amazon.com/images/I/81oUpkwV8ML._SY355_.jpg", alt = "Frisbee", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+		    {% if item[0] == "Basketball"%}
+			<TD><img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Basketball.png/220px-Basketball.png", alt = "Basketball", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+		    {% if item[0] == "Football"%}
+			<TD><img src = "https://thestampedenews.org/wp-content/uploads/2017/09/JVfootball.png", alt = "Football", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+		    {% if item[0] == "Baseball"%}
+			<TD><img src = "http://www.trbimg.com/img-59239622/turbine/ph-ac-cs-baseball-severn-boys-latin0523-20170522", alt = "Baseball", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+		    {% if item[0] == "Cricket"%}
+			<TD><img src = "https://i.pinimg.com/236x/b5/21/bb/b521bbba24e2c33fe187e119f6b6e995--cricket-bat-cultural-studies.jpg", alt = "Cricket", style="width:100px;height:100px;"></TD>
+		    {% endif %}
+
+            {% for elem in item %}
+            <TD>{{elem}}</TD>
+            {% endfor %}
+            <TD><form action="/delete_sport" method=post><button type="submit" value={{item[0]}} name=sportname>Delete</button></form></TD>
+        </TR>
+        {% endfor %}
+    </TABLE>
+
+
+
+{% endblock %}

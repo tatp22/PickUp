@@ -1,0 +1,15 @@
+{% extends "template.html" %}
+{% set active_page = "welcome" %}
+{% block content %}
+<div class="jumbo">
+    <h1>Search</h1>
+    <br/>
+    <form action="/search_success">
+        <br>
+        Search People: <br>
+        <input type="text" name="search">
+        <br>
+        <input type="submit" value="Send">
+    </form>
+</div>
+{% endblock %}
