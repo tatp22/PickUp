@@ -5,7 +5,7 @@
     <h1>Sign Up Here! :)</h1>
         <br>
         {% from "_formhelpers.html" import render_field %}
-        <form method=post action="/reg">
+        <form method=post action="/regform">
             <dl>
                 {{render_field(form.username)}}
                 {{render_field(form.real_name)}}
@@ -20,9 +20,4 @@
         {% if error %}
             <p class="error"><strong>ERROR:</strong>{{error}}</p>
         {% endif %}
-        {% for message in get_flashed_messages() %}
-		<div class=flash>
-			{{ message }}
-		</div>
-	{% endfor %}
 {% endblock %}

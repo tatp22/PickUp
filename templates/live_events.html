@@ -53,7 +53,7 @@
     		<form action="/update_event" method=post><button type="submit" value="{{item[0]}}" name=updateeventname>Update</button></form>
     		{% endif %}
 
-            {% if session['username'] != item[-1] and item[-1] != item[2] and item[1] in playsData%}
+            {% if session['username'] != item[-1] and item[-1] < item[2] and item[1] in playsData%}
             <form action = "/notif_join" method=post>
                 <div class="alert alert-success" role="alert">
                     <input type="hidden" value="{{ item[0] }}" name="item0" />
@@ -66,7 +66,7 @@
             {% endif %}
 
 
-            {% if item[-1] == item[2] %}
+            {% if item[-1] >= item[2] %}
             <div class="alert alert-danger" role="alert">
               <b>This Event is FULL</b>
             </div>

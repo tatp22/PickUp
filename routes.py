@@ -1,13 +1,9 @@
 from flask import Flask,request,render_template,redirect, url_for,session,flash
 from functools import wraps
 import MySQLdb
-from MySQLdb import escape_string as thwart
 from wtforms import Form, BooleanField, TextField, PasswordField, IntegerField, validators
-from flask_socketio import SocketIO, emit
 import gc
 import os
-import datetime
-from threading import Thread, Event
 
 # Import modules for CGI handling
 import cgi, cgitb
@@ -69,22 +65,12 @@ def home():
 
     rows2 = cursor.fetchall()
     data2 = [row[0] for row in rows2]
-    noti_num = 1
-    cursor.close()
-    return render_template('home.html', noti_num = noti_num)
 
-@app.route('/test-form', methods = ['post', 'get'])
-def test_form():
-    return render_template('test-form.html')
 
-@app.route('/test-form_success', methods = ['post'])
-def test_form_post():
-    sports = request.form['sports']
-    cursor = conn.cursor()
-    cursor.execute('insert into sports values ("' + sports + '")')
-    conn.commit()
+
     cursor.close()
-    return render_template('test-form.html')
+    return render_template('home.html')
+
 
 @app.route('/live_events', methods = ['post', 'get'])
 def live_events():
@@ -128,10 +114,12 @@ def live_events():
     levelRangeRows = cursor.fetchall()
     #levelRangeData = [ row for row in levelRangeRows ]
     levelRangeData = { row[0]: row[1] for row in levelRangeRows }
+
+
     cursor.close()
     return render_template('live_events.html', data = data, data2 = data2, playsData = playsQueryData, levelData = levelRangeData)
 
-@app.route('/my_events', methods = ['post', 'get'])
+@app.route('/my_events', methods = ['get'])
 def my_events():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM events WHERE EXISTS (SELECT PersonUsername FROM Participants WHERE PersonUsername = '{0}' AND Name = EventName) OR Creator = '{0}'".format(session['username']))
@@ -178,64 +166,11 @@ def my_events():
     rows4 = cursor.fetchall()
     data4 = [row for row in rows4]
 
-
     cursor.close()
     return render_template('my_events.html', data = data, data_team1 = data2, data_team2 = data3, data_participates= data4)
 
-@app.route('/testadv', methods = ['post', 'get'])
-def testadv():
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM events WHERE EXISTS (SELECT PersonUsername FROM Participants WHERE PersonUsername = '{0}' AND Name = EventName) OR Creator = '{0}'".format(session['username']))
-    rows = cursor.fetchall()
-    data = [row for row in rows]
-    cursor.execute('SET @row_number = 0')
-    cursor.execute("""
-                    SELECT PersonUsername, EventName, Sports, num, SkillLvl
-                    FROM (
-                    SELECT (@row_number:=@row_number+1) as num, PersonUsername, EventName, Sports, SkillLvl
-                    FROM(
-                    SELECT part.PersonUsername, part.EventName, event.Sports, play.SkillLvl
-                    FROM Participants part, Plays play, events event
-                    WHERE event.sports = play.SportName AND
-                    event.Name = part.EventName AND
-                    part.PersonUsername = play.Username
-                    ORDER BY EventName, SkillLvl
-                    ) a
-                    ) t
-                    WHERE mod(num, 2) = 0
-                        """)
-    rows2 = cursor.fetchall()
-    data2 = [row for row in rows2]
-    flash(data2)
-    cursor.execute('SET @row_number = 0')
-    cursor.execute("""
-                        SELECT PersonUsername, EventName, Sports, num, SkillLvl
-                        FROM (
-                        SELECT (@row_number:=@row_number+1) as num, PersonUsername, EventName, Sports, SkillLvl
-                        FROM(
-                        SELECT part.PersonUsername, part.EventName, event.Sports, play.SkillLvl
-                        FROM Participants part, Plays play, events event
-                        WHERE event.sports = play.SportName AND
-                        event.Name = part.EventName AND
-                        part.PersonUsername = play.Username
-                        ORDER BY EventName, SkillLvl
-                        ) a
-                        ) t
-                        WHERE mod(num, 2) = 1
-                        """)
-    rows3 = cursor.fetchall()
-    data3 = [row for row in rows3]
-    cursor.execute("SELECT * FROM Participants")
-    rows4 = cursor.fetchall()
-    data4 = [row for row in rows4]
-
-
-    cursor.close()
-    return render_template('testadv.html', data = data, data_team1 = data2, data_team2 = data3, data_participates= data4)
-
 @app.route('/notif_join', methods = ['POST'])
 def notif_join():
-    #pName = request.form['updateevent'][0]
     creator = session['username']
     eName = request.form['item0'] #event name
     eLoc = request.form['item2'] #event location
@@ -314,9 +249,9 @@ def notifications():
 
     noti_num = len(data2)
 
-    #skip = 0
+
     cursor.close()
-    return render_template('notifications.html', data=data, data2 = data2, noti_num = noti_num)#, skip = skip)
+    return render_template('notifications.html', data=data, data2 = data2)#, skip = skip)
 
 @app.route('/events', methods = ['post', 'get'])
 def events():
@@ -334,18 +269,11 @@ def events():
 
     sportsRows = cursor.fetchall()
     sportsData = [row for row in sportsRows]
+
+
     cursor.close()
     return render_template('events.html', loc_data = loc_data, sports_data = sportsData)
 
-@app.route('/friends', methods=['get','post'])
-def friends():
-    cursor = conn.cursor()
-    username = session['username']
-    cursor.execute('SELECT * FROM Friends WHERE Username1 = "{0}"'.format(username))
-    rows = cursor.fetchall()
-    data = [row for row in rows]
-    cursor.close()
-    return render_template('friends.html',data=data)
 
 @app.route('/update_event', methods = ['post'])
 def update_event():
@@ -383,12 +311,10 @@ def update_event():
 
     dateStr = datetime[0] + '-' + datetime[1] + '-' + datetime[2] + 'T' + datetime[3] + ':' + datetime[4]
 
+
     cursor.close()
 
     return render_template('update_events.html', data = data, loc_data = loc_data, sports_data = sports_data, datetime = [dateStr])
-
-def changeDateFormat(date):
-	return eval(date).isoformat()[:-3]
 
 def Search_number_String(String):
     index_list = []
@@ -406,7 +332,13 @@ def search_event():
     key = request.form['searchkey']
     cursor = conn.cursor()
     #SELECT * FROM events WHERE Name LIKE "%hangouSSt%";
-    cursor.execute('SELECT * FROM events WHERE Name LIKE ' + '"%' + key + '%"')
+    #cursor.execute('SELECT * FROM events WHERE Name LIKE ' + '"%' + key + '%"')
+    cursor.execute("""SELECT events.*,C.cnt
+                      FROM events
+                      INNER JOIN (SELECT EventName, count(EventName) as cnt
+                        FROM Participants
+                        GROUP BY EventName) C ON events.Name = C.EventName AND Name LIKE '%{0}%';
+                    """.format(key))
     #data = [eventname]
     rows = cursor.fetchall()
     data = [row for row in rows]
@@ -430,6 +362,8 @@ def search_event():
     levelRangeRows = cursor.fetchall()
     #levelRangeData = [ row for row in levelRangeRows ]
     levelRangeData = { row[0]: row[1] for row in levelRangeRows }
+
+
     cursor.close()
     return render_template('live_events.html', data = data, data2 = data2, playsData = playsQueryData, levelData = levelRangeData)
 
@@ -438,8 +372,12 @@ def filter_event():
     key = request.form['filter']
     cursor = conn.cursor()
     #SELECT * FROM events WHERE Name LIKE "%hangouSSt%";
-    cursor.execute('SELECT * FROM events WHERE Sports = "' + key + '"')
-    #data = [eventname]
+    cursor.execute("""SELECT events.*,C.cnt
+                      FROM events
+                      INNER JOIN (SELECT EventName, count(EventName) as cnt
+                        FROM Participants
+                        GROUP BY EventName) C ON events.Name = C.EventName AND Sports = '{0}';
+                    """.format(key))
     rows = cursor.fetchall()
     data = [row for row in rows]
 
@@ -462,7 +400,6 @@ def filter_event():
     levelRangeRows = cursor.fetchall()
     #levelRangeData = [ row for row in levelRangeRows ]
     levelRangeData = { row[0]: row[1] for row in levelRangeRows }
-
 
 
     cursor.close()
@@ -530,6 +467,7 @@ def delete_event():
     cursor.execute("SELECT * FROM Participants")
     rows4 = cursor.fetchall()
     data4 = [row for row in rows4]
+
 
     cursor.close()
 
@@ -825,15 +763,7 @@ def login_required(test):
 			return redirect(url_for('log'))
 	return wrap
 
-@app.route('/hello')
-@login_required
-def hello():
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM sports")
-    rows = cursor.fetchall()
-    data = [row for row in rows]
-    cursor.close()
-    return render_template('hello.html', data = data)
+
 
 @app.route('/logout')
 def logout():
@@ -860,14 +790,15 @@ def edit_profile():
     cursor.execute('SELECT SportName, SkillLvl FROM Plays WHERE Username = "{0}"'.format(session['username']))
     rows2 = cursor.fetchall()
     data2 = [row for row in rows2]
+
+
     cursor.close()
     return render_template('edit_profile.html', data = data, data2 = data2, loc_data = loc_data, my_loc_data = my_loc_data)
 
-@app.route('/reg', methods = ['GET', 'POST'])
+@app.route('/reg', methods = ['GET'])
 def register():
     try:
         form = RegistrationForm(request.form)
-
         if request.method == "POST" and form.validate():
             flash("Validated")
             username = form.username.data
@@ -876,30 +807,57 @@ def register():
             age = form.age.data
             c = conn.cursor()
 
-            x = c.execute("SELECT * FROM people WHERE username = '{0}'".format(username))
-
+            c.execute("SELECT * FROM people WHERE username = '{0}'".format(username))
+            x = c.fetchall()
             if int(x) > 0:
                 flash("THAT USER NAME IS ALREADY TAKEN REEEEEEEEEEEEEEEEEEEEEEEEE")
                 return render_template('register.html',form=form)
 
             else:
                 query = "INSERT INTO people (Username,Name,Age,Password) VALUES ('{0}','{1}','{2}','{3}')".format(username,name,age,password)
+                flash(query)
                 c.execute(query)
-                conn.commit()
+                c.commit()
 
                 c.close()
-                conn.close()
-                gc.collect()
-
+                #conn.close()
+                #gc.collect()
+                flash("Registered!")
                 session['logged_in'] = True
                 session['username'] = username
                 return redirect(url_for("home"))
-        flash("Invalidated")
         return render_template("register.html",form=form)
 
     except Exception as e:
         error=str(e)
         return render_template("register.html", error=error)
+
+@app.route('/regform', methods = ['POST'])
+def regform():
+    form = RegistrationForm(request.form)
+    if form.validate():
+        username = form.username.data
+        password = form.password.data
+        name = form.real_name.data
+        age = form.age.data
+        c = conn.cursor()
+        x = c.execute("SELECT * FROM people WHERE username = '{0}'".format(username))
+
+        if int(x) > 0:
+            flash("THAT USER NAME IS ALREADY TAKEN REEEEEEEEEEEEEEEEEEEEEEEEE")
+            return render_template('register.html',form=form)
+
+        else:
+            query = "INSERT INTO people (Username,Name,Age,Password) VALUES ('{0}','{1}','{2}','{3}')".format(username,name,age,password)
+            c.execute(query)
+            conn.commit()
+            c.close()
+
+            session['logged_in'] = True
+            session['username'] = username
+            return redirect(url_for("home"))
+
+    return render_template("home.html")
 
 @app.route('/log', methods = ['GET', 'POST'])
 def log():
@@ -932,6 +890,5 @@ def log():
 
 
 if __name__ == '__main__':
-    #app.debug = True
-    socketio.run(app, debug=True)
-    #app.run()
+    app.debug = True
+    app.run()
