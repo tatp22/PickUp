@@ -49,7 +49,10 @@ formation based on the participating users’ information.
 
 
 ## Made by
-[Che Ellis](https://github.com/cgellis2)
-[YJ Kim](https://github.com/whyjay17)
-[Peter Tatkowski](https://github.com/tatp22)
-[Ross Schneider](https://github.com/rossch2)
+[Che Ellis](https://github.com/cgellis2): Backend Development (Flask, Python, SQL Querying - second advanced
+function)
+[YJ Kim](https://github.com/whyjay17): Backend Development (Flask, Python, SQL querying, deployment)
+[Peter Tatkowski](https://github.com/tatp22): Full Stack Development (Design features, CSS, HTML, Flask,
+Python, Bootstrap, SQL Querying)
+[Ross Schneider](https://github.com/rossch2): Backend Development (Flask, Python, SQL Querying, Profile Page,
+Live Events)
